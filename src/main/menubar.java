@@ -10,6 +10,8 @@ import java.awt.GridLayout;
 import javax.swing.JFrame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,6 +25,7 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 
 /**
@@ -36,7 +39,7 @@ public class menubar extends JFrame  implements ActionListener,MenuListener  {
           HashMap<String,String> hm= new HashMap<>();
     
      JMenuItem who= new JMenuItem("console");
-     
+     JTree mytree;
      JPanel  mainpanel= new JPanel ();
       JMenu menuTwo;
 
@@ -48,7 +51,11 @@ public class menubar extends JFrame  implements ActionListener,MenuListener  {
      JLabel fullpath;
      
      
-     //Filehandler object
+     JTextArea demo1= new JTextArea("Class full code\n");
+     JTextArea demo2= new JTextArea("Class description\n");
+       JTextArea demo3= new JTextArea("JTree Goes here\n");
+       
+      //Filehandler object
      
      Filehandler handler = new Filehandler();
      
@@ -72,7 +79,8 @@ public class menubar extends JFrame  implements ActionListener,MenuListener  {
  public void  showmenubar(){
      
      
-     
+     demo1.setEditable(false);
+        demo2.setEditable(false);
 allfilesarea.setBorder(border);
 allfilesarea2.setBorder(border);
      //
@@ -88,15 +96,21 @@ allfilesarea2.setBorder(border);
 //     mainpanel.add(fullpath);
             mainpanel.setBackground(Color.yellow);
 //           mainpanel.add(fullpath);
-//            allfilesarea.setBounds(2, 50, 250, 250);
-//             allfilesarea.setSize(200,600);
+            allfilesarea.setBounds(2, 50, 250, 250);
+             allfilesarea.setSize(200,600);
           
 //     mainpanel.add(allfilesarea);
+ mainpanel.add(demo3);
+     mainpanel.add(demo1);
+     mainpanel.add(demo2);
+    
      
+
+
+
      
-     
-//            allfilesarea2.setBounds(280, 50, 250, 250);
-//             allfilesarea2.setSize(200,600); 
+            allfilesarea2.setBounds(280, 50, 250, 250);
+             allfilesarea2.setSize(200,600); 
 //     mainpanel.add(allfilesarea2);
    
     
@@ -185,9 +199,9 @@ else if(ae.getSource()==OF){
         String filepath=f.getPath(); 
         
         System.out.println("+++++++"+filepath+"+++++++++++++++");
-        fullpath.setText(filepath);
+//        fullpath.setText(filepath);
         
-        handler.getjtree(f);
+       
         
         try {
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -221,11 +235,31 @@ else if(ae.getSource()==OF){
        filesshow(f);
        
        if(! hm.isEmpty()){
-           
-          mainpanel.add(handler.readfile(hm));
-          mainpanel.add(cc);
-          mainpanel.add(cd);
-           
+            
+          mainpanel.remove(demo3);
+          mytree=handler.readfile(hm);
+         
+         mainpanel.add( mytree);
+          mytree.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+             demo1.setText(" ");
+            if (e.getClickCount() == 2) {
+               
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode)
+                       mytree.getLastSelectedPathComponent();
+                if (node == null) return;
+                Object nodeInfo = node.getUserObject();
+                System.out.print(nodeInfo);
+                demo1.setText(handler.readsinglefile(nodeInfo.toString()));
+                demo2.setText(handler.checkclassName(nodeInfo.toString()));
+                System.out.println(handler.readsinglefile(nodeInfo.toString()));
+               
+            }
+          
+        }
+    });
+//          
        } else {
            
            

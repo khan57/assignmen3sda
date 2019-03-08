@@ -21,7 +21,7 @@ import javax.swing.tree.DefaultTreeModel;
  */
 public class Filehandler {
     
-    File absolutepath;
+     File absolutepath;
     String classname="";
     BufferedReader reader;
     String filepath;
@@ -31,13 +31,36 @@ public class Filehandler {
      private DefaultMutableTreeNode root;
      private DefaultMutableTreeNode childs;
 
-    private DefaultTreeModel treeModel;
+
 
     private JTree tree;
-    
+    String wholefile="";
     
      ArrayList<String> listoffiles = new ArrayList<>();
      HashMap <String ,String > hp= new HashMap<>();
+     
+     
+     public String readsinglefile(String fpath){
+         
+                    try{
+                           BufferedReader   readerf = new BufferedReader(new  FileReader(fpath));
+
+                          String singleline=readerf.readLine();
+                          while(singleline!=null){
+
+                              wholefile+="\n"+singleline;
+                             singleline= readerf.readLine();
+                          }
+
+                    }catch(IOException e){
+
+                           System.out.println(e);
+                    }
+
+
+
+                    return wholefile;
+     }
     public JTree readfile(HashMap<String,String> mp ){
         
 //       this.listoffiles=a;
@@ -104,24 +127,50 @@ String[] items = line.split(" ");
     
     
     
+    public String checkclassName(String pathtoFile){
     
-   public JTree getjtree(File folderpath){
-   
-   
-       filesshow(folderpath);
-       
-   
-   return  tree;
-}
-   
-   
-   
-   
-   public  void filesshow(File dir) {
+        String cname="";
         
-       
-        
-            }
+        try{
+    
+    reader = new BufferedReader(new  FileReader(pathtoFile));
+    
+    
+                    String line= reader.readLine();
+                    while(line != null ){
+
+                //        System.out.println(line);
+
+                String[] items = line.split(" ");
+
+                        for(int j=0;j<items.length;j++){
+
+                            if(items[j].equalsIgnoreCase("class")){
+
+                                index=j;
+                                cname=items[index+1];
+                            }
+                        }
+
+
+
+                   line= reader.readLine();
+
+
+                    }
+
+                    System.out.println("\nClass name " + cname);
+
+
+                }       catch(IOException e){
+
+                    System.out.println(e);
+
+                }
+        return cname ;
+    
+    }
+
         
 	
     
