@@ -9,7 +9,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Dictionary;
 import java.util.HashMap;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -20,6 +22,7 @@ import javax.swing.tree.DefaultTreeModel;
  * @author Haseeb
  */
 public class Filehandler {
+    ArrayList<String> methods= new ArrayList<>();
     
      File absolutepath;
     String classname="";
@@ -145,6 +148,16 @@ String[] items = line.split(" ");
 
                         for(int j=0;j<items.length;j++){
 
+                            //for methods
+                            
+                            if(items[j].equalsIgnoreCase("public") || items[j].equalsIgnoreCase("private") ||items[j].equalsIgnoreCase("protected"))
+                            {
+                                    methods.add(items[j+2]);
+                            
+                            }
+                            
+                            //
+                            
                             if(items[j].equalsIgnoreCase("class")){
 
                                 index=j;
@@ -160,19 +173,27 @@ String[] items = line.split(" ");
                     }
 
                     System.out.println("\nClass name " + cname);
+                    
+                    for(String temp:methods){
+                    
+                   System.out.println("\nMethod name: "+temp);
+                    }
 
 
                 }       catch(IOException e){
 
                     System.out.println(e);
+                 
+                   
 
                 }
         return cname ;
+        
     
     }
 
         
-	
+
     
 
 }
